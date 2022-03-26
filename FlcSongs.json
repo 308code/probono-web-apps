@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Raise A Hallelujh",
+    "artist": "Bethel Music & Jonathan David Helser & Melissa Helser",
+    "played": [
+      {
+        "series": "PC,|,C,C,PC,||,V1,V2",
+        "notes": "This is a note for Raise a Hallelujah!"
+      }
+    ],
+    "aka": [
+      "Hallelujah"
+    ]
+  },
+  {
+    "title": "Oceans (Where Feet May Fail)",
+    "artist": "Hillsong United",
+    "played": [{
+      "series": "PC,|,PC,C,C,V1,V2,PC",
+      "notes": "Note for song Oceans"
+    }
+    ],
+    "aka": [
+      "Hillsong United"
+    ]
+  }
+]
