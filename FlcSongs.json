@@ -23,5 +23,22 @@
     "aka": [
       "Hillsong United"
     ]
+  },
+  {
+    "title": "My God Is An Awesome God",
+    "artist": "Unknown",
+    "played": [{
+      "datePlayed": "2022-03-19",
+      "series": "PC,|,PC,C,C,V1,V2,PC",
+      "notes": "Note one for song Oceans"
+    },{
+      "datePlayed": "2022-03-26",
+      "series": "PC,|,PC,C,C,V1,V2,PC",
+      "notes": "Note two for song Oceans"
+    }
+    ],
+    "aka": [
+      "My God", "My God Is Awesome"
+    ]
   }
 ]
