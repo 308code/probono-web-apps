@@ -1,4 +1,4 @@
-#Intellij specific files
+#Intellij specific config file
 .idea/
 
 # Compiled class file
