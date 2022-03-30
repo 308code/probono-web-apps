@@ -1,5 +1,8 @@
 #Intellij specific config file
 .idea/
+*.iml
+
+target/
 
 # Compiled class file
 *.class
