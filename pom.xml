@@ -44,6 +44,13 @@
                 <version>${mockito-v}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- Database -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>2.1.11.RELEASE</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <build>
