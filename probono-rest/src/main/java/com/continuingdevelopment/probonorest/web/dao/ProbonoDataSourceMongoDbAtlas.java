@@ -1,11 +1,10 @@
 package com.continuingdevelopment.probonorest.web.dao;
 
-import com.mongodb.ConnectionString;
+
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 
