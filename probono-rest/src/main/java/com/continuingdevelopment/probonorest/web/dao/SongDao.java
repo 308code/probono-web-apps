@@ -21,6 +21,7 @@ public interface SongDao extends MongoRepository<SongDto, String> {
     List<SongDto> findAll();
 
     //Find songs played in the given date range ad returned Sorted by title in ASC order
+    //TODO fix this so the date range search works as expected
     @Query(value="{ '$and' : [ { 'played.datePlayed' : {'$gte' : { $date : ?0 }}} , { 'played.datePlayed' : {'$lte' : { $date : ?1 }}}]}")
     List<SongDto> findSongsPlayedBetweenDates(Date fromDate, Date toDate);
 
@@ -28,7 +29,7 @@ public interface SongDao extends MongoRepository<SongDto, String> {
     @Query(value = "{ '$or' : [{ 'title' : { '$regularExpression' : " +
             "{ 'pattern' : '?0', 'options' : 'i'}}}, { 'aka' : { '$regularExpression' : " +
             "{ 'pattern' : '?0', 'options' : 'i'}}}]}")
-    List<SongDto> findSongDtosByTitleMatchesRegexOrAkaMatchesRegex(String title1, String title2);
+    List<SongDto> findSongDtosByTitleContaining(String title1);
 
     //Find songs that contain the text in the artist field
     @Query(value = "{'artist' : { '$regex' : ?0, $options: 'i'}}")
@@ -37,5 +38,6 @@ public interface SongDao extends MongoRepository<SongDto, String> {
     // Update or create, if song doesn't exist
     SongDto save(SongDto songDto);
 
+    // Delete song by Id
     void deleteById(String songId);
 }
