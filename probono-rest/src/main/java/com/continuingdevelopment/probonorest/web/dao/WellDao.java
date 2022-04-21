@@ -15,4 +15,7 @@ public interface WellDao extends MongoRepository<WellDto, String> {
     //Find all wells in the camphire_drilling_wells collection
     List<WellDto> findAll();
 
+    //Find well with a particular id
+    WellDto findWellDtoById(String id);
+
 }

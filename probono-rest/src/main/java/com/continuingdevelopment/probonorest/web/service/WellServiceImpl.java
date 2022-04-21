@@ -18,6 +18,11 @@ public class WellServiceImpl implements WellService{
     }
 
     @Override
+    public WellDto findWellById(String wellId) {
+        return wellDao.findWellDtoById(wellId);
+    }
+
+    @Override
     public List<WellDto> findAllWells() {
         return wellDao.findAll();
     }
