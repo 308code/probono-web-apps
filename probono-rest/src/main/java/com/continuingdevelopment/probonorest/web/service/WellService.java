@@ -1,13 +1,12 @@
 package com.continuingdevelopment.probonorest.web.service;
 
-import com.continuingdevelopment.probonorest.web.model.SongDto;
 import com.continuingdevelopment.probonorest.web.model.WellDto;
 
 import java.util.Date;
 import java.util.List;
 
 public interface WellService {
-//    SongDto findWellById(String wellId);
+    WellDto findWellById(String wellId);
     List<WellDto> findAllWells();
 //    List<WellDto> getWellNameContains(String title);
 //    List<WellDto> getWellCountyContains(String title);

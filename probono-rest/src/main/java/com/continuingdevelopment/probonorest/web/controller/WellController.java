@@ -1,8 +1,6 @@
 package com.continuingdevelopment.probonorest.web.controller;
 
-import com.continuingdevelopment.probonorest.web.model.SongDto;
 import com.continuingdevelopment.probonorest.web.model.WellDto;
-import com.continuingdevelopment.probonorest.web.service.SongService;
 import com.continuingdevelopment.probonorest.web.service.WellService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -40,6 +38,12 @@ public class WellController {
         List<WellDto> songDtoList = wellService.findAllWells();
         HttpHeaders headers = addCountToHeader(songDtoList);
         return new ResponseEntity<>(songDtoList,headers,HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<WellDto> getWellById(@PathVariable("id") String id){
+        WellDto wellDto = wellService.findWellById(id);
+        return new ResponseEntity<>(wellDto,HttpStatus.OK);
     }
 
     private HttpHeaders addCountToHeader(List<WellDto> wellDtoList){
