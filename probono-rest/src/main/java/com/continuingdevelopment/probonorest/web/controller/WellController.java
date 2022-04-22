@@ -1,5 +1,6 @@
 package com.continuingdevelopment.probonorest.web.controller;
 
+import com.continuingdevelopment.probonorest.web.model.SongDto;
 import com.continuingdevelopment.probonorest.web.model.WellDto;
 import com.continuingdevelopment.probonorest.web.service.WellService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,14 @@ public class WellController {
     public WellController(WellService wellService){
         this.wellService = wellService;
     }
+    
+    @PostMapping()
+    public ResponseEntity<String> createWell(@RequestBody WellDto wellDto){
+        String newWellId = wellService.createWell(wellDto);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("location","http://localhost:8080/api/wells/" + newWellId);
+        return new ResponseEntity<>(newWellId,headers,HttpStatus.CREATED);
+    }
 
     @GetMapping()
     public ResponseEntity<List<WellDto>> getAllWells(){
@@ -44,6 +53,18 @@ public class WellController {
     public ResponseEntity<WellDto> getWellById(@PathVariable("id") String id){
         WellDto wellDto = wellService.findWellById(id);
         return new ResponseEntity<>(wellDto,HttpStatus.OK);
+    }
+
+    @PutMapping()
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateWell(@RequestBody WellDto wellDto){
+        wellService.updateWell(wellDto);
+    }
+
+    @DeleteMapping("/{wellId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteWellById(@PathVariable("wellId") String id){
+        wellService.deleteWellById(id);
     }
 
     private HttpHeaders addCountToHeader(List<WellDto> wellDtoList){

@@ -38,7 +38,7 @@ public class SongController {
         String newSongId = songService.createSong(songDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("location","http://localhost:8080/api/songs/" + newSongId);
-        return new ResponseEntity<>(headers,HttpStatus.CREATED);
+        return new ResponseEntity<>(newSongId,headers,HttpStatus.CREATED);
     }
 
     @GetMapping("/{songId}")
