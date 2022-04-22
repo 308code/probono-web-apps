@@ -11,7 +11,7 @@ public interface WellService {
 //    List<WellDto> getWellNameContains(String title);
 //    List<WellDto> getWellCountyContains(String title);
 //    List<WellDto> getWellsThatProducedBetween(Date fromDate, Date toDate);
-//    String createWell(WellDto wellDto);
-//    void updateWell(WellDto wellDto);
-//    void deleteWell(String songId);
+    String createWell(WellDto wellDto);
+    void updateWell(WellDto wellDto);
+    void deleteWellById(String wellId);
 }
