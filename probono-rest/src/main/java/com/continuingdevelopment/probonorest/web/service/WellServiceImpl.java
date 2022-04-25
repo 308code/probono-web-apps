@@ -35,6 +35,16 @@ public class WellServiceImpl implements WellService{
     }
 
     @Override
+    public List<WellDto> getWellsWhereWellNameContains(String wellName) {
+        return wellDao.findWellDtosByWellNameContains(wellName);
+    }
+
+    @Override
+    public List<WellDto> getWellsWhereCountyContains(String county) {
+        return wellDao.findWellDtosByCountyContains(county);
+    }
+
+    @Override
     public void updateWell(WellDto wellDto) {
         wellDao.save(wellDto);
     }

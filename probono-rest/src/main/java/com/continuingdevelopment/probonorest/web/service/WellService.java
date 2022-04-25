@@ -8,8 +8,8 @@ import java.util.List;
 public interface WellService {
     WellDto findWellById(String wellId);
     List<WellDto> findAllWells();
-//    List<WellDto> getWellNameContains(String title);
-//    List<WellDto> getWellCountyContains(String title);
+    List<WellDto> getWellsWhereWellNameContains(String title);
+    List<WellDto> getWellsWhereCountyContains(String title);
 //    List<WellDto> getWellsThatProducedBetween(Date fromDate, Date toDate);
     String createWell(WellDto wellDto);
     void updateWell(WellDto wellDto);

@@ -1,10 +1,8 @@
 package com.continuingdevelopment.probonorest.web.controller;
 
-import com.continuingdevelopment.probonorest.web.model.SongDto;
 import com.continuingdevelopment.probonorest.web.model.WellDto;
 import com.continuingdevelopment.probonorest.web.service.WellService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -53,6 +50,20 @@ public class WellController {
     public ResponseEntity<WellDto> getWellById(@PathVariable("id") String id){
         WellDto wellDto = wellService.findWellById(id);
         return new ResponseEntity<>(wellDto,HttpStatus.OK);
+    }
+
+    @GetMapping("/name/contains/{wellName}")
+    public ResponseEntity<List<WellDto>> getWellsWhereSongArtistContains(@PathVariable("wellName") String wellName){
+        List<WellDto> wellDtoList = wellService.getWellsWhereWellNameContains(wellName);
+        HttpHeaders headers = addCountToHeader(wellDtoList);
+        return new ResponseEntity<>(wellDtoList, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/county/contains/{county}")
+    public ResponseEntity<List<WellDto>> getWellsWhereCountyContains(@PathVariable("county") String county){
+        List<WellDto> wellDtoList = wellService.getWellsWhereCountyContains(county);
+        HttpHeaders headers = addCountToHeader(wellDtoList);
+        return new ResponseEntity<>(wellDtoList, headers, HttpStatus.OK);
     }
 
     @PutMapping()
