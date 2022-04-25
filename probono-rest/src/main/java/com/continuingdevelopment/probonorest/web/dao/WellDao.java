@@ -21,6 +21,12 @@ public interface WellDao extends MongoRepository<WellDto, String> {
     //Find well with a particular id
     WellDto findWellDtoById(String id);
 
+    //Find all wells that containe the incoming string
+    List<WellDto> findWellDtosByWellNameContains(String wellName);
+
+    //Find all wells from a particular county
+    List<WellDto> findWellDtosByCountyContains(String county);
+
     //Update well
     WellDto save(WellDto wellDto);
 
