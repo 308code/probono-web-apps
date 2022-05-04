@@ -3,6 +3,7 @@ package com.continuingdevelopment.probonorest.web.controller;
 import com.continuingdevelopment.probonorest.web.model.WellDto;
 import com.continuingdevelopment.probonorest.web.service.WellService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -62,6 +64,15 @@ public class WellController {
     @GetMapping("/county/contains/{county}")
     public ResponseEntity<List<WellDto>> getWellsWhereCountyContains(@PathVariable("county") String county){
         List<WellDto> wellDtoList = wellService.getWellsWhereCountyContains(county);
+        HttpHeaders headers = addCountToHeader(wellDtoList);
+        return new ResponseEntity<>(wellDtoList, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/date-played/between/{fromDate}/{toDate}")
+    public ResponseEntity<List<WellDto>> getWellsWhereCountyContains(
+            @PathVariable("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+            @PathVariable("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate){
+        List<WellDto> wellDtoList = wellService.getAllWellsByProductionDateRange(fromDate,toDate);
         HttpHeaders headers = addCountToHeader(wellDtoList);
         return new ResponseEntity<>(wellDtoList, headers, HttpStatus.OK);
     }

@@ -10,7 +10,7 @@ public interface WellService {
     List<WellDto> findAllWells();
     List<WellDto> getWellsWhereWellNameContains(String title);
     List<WellDto> getWellsWhereCountyContains(String title);
-//    List<WellDto> getWellsThatProducedBetween(Date fromDate, Date toDate);
+    List<WellDto> getAllWellsByProductionDateRange(Date fromDate, Date toDate);
     String createWell(WellDto wellDto);
     void updateWell(WellDto wellDto);
     void deleteWellById(String wellId);
