@@ -8,8 +8,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class ProbonoRestApplication {
-    private static String pathPattern = "/**";
-    private static String allowedOrigins = "http://localhost:4200";
+    private final static String pathPattern = "/**";
+    private final static String allowedOrigins = "http://localhost:4200";
     public static void main(String[] args) {
         SpringApplication.run(ProbonoRestApplication.class, args);
     }
