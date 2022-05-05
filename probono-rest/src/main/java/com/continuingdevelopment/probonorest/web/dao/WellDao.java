@@ -29,8 +29,8 @@ public interface WellDao extends MongoRepository<WellDto, String> {
 
     //Find wells production in the given date range ad returned Sorted by county then wellName then wellNumber in ASC order
     //TODO fix this so the date range search works as expected
-    @Query(  value="{ '$and' : [ { 'production.payedDate' : { '$gte' : { $date : ?0}}} , { 'production.payedDate' : { '$lte' : { $date : ?1 }} } ]}")
-    List<WellDto> findWellDtosByProductionDates(Date fromDate, Date toDate);
+    //@Query(  value="{ '$and' : [ { 'production.payedDate' : { '$gte' : { $date : ?0}}} , { 'production.payedDate' : { '$lte' : { $date : ?1 }} } ]}")
+    //List<WellDto> findWellDtosByProductionDates(Date fromDate, Date toDate);
 
     //Update well
     WellDto save(WellDto wellDto);

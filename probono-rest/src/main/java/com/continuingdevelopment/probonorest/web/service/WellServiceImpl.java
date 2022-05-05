@@ -1,20 +1,14 @@
 package com.continuingdevelopment.probonorest.web.service;
 
-import com.continuingdevelopment.probonorest.web.dao.SongDao;
 import com.continuingdevelopment.probonorest.web.dao.WellDao;
-import com.continuingdevelopment.probonorest.web.model.PlayedDto;
 import com.continuingdevelopment.probonorest.web.model.ProductionDto;
-import com.continuingdevelopment.probonorest.web.model.SongDto;
 import com.continuingdevelopment.probonorest.web.model.WellDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -62,19 +56,19 @@ public class WellServiceImpl implements WellService{
         wellDao.deleteWellDtoById(wellId);
     }
 
+    //TODO find way not to have to use the findAll and then filtering down in this service.  Make MongoDB do the work.
     @Override
     public List<WellDto> getAllWellsByProductionDateRange(Date fromDate, Date toDate) {
-        List<WellDto> originalListOfWellDtos = wellDao.findAll();
-        List<WellDto> resultingDtoList = new ArrayList<>();
-        originalListOfWellDtos.forEach(wellDto -> {
-            List<ProductionDto> tempProductionDtoList = wellDto.getProduction();
-            for (ProductionDto productionDto : tempProductionDtoList) {
-                if (!fromDate.after(productionDto.getPayedDate()) && !toDate.before(productionDto.getPayedDate())) {
-                    resultingDtoList.add(wellDto);
-                    break;
-                }
-            }
-        });
-        return resultingDtoList;
+        List<WellDto> result = new ArrayList<>(0);
+        wellDao.findAll()
+                .forEach(wellDto -> {
+                    for (ProductionDto productionDto : wellDto.getProduction()) {
+                        if (!fromDate.after(productionDto.getPayedDate()) && !toDate.before(productionDto.getPayedDate())) {
+                            result.add(wellDto);
+                            break;
+                        }
+                    }
+                });
+        return result;
     }
 }
