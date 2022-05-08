@@ -1,12 +1,11 @@
 package com.continuingdevelopment.probonorest.web.service;
 
 import com.continuingdevelopment.probonorest.web.dao.WellDao;
-import com.continuingdevelopment.probonorest.web.model.ProductionDto;
 import com.continuingdevelopment.probonorest.web.model.WellDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +22,9 @@ public class WellServiceImpl implements WellService{
     @Override
     public String createWell(WellDto wellDto) {
         WellDto actual = wellDao.insert(wellDto);
+        if(ObjectUtils.isEmpty(actual)){
+            return null;
+        }
         return actual.getId();
     }
 
@@ -33,17 +35,17 @@ public class WellServiceImpl implements WellService{
 
     @Override
     public List<WellDto> findAllWells() {
-        return wellDao.findAll();
+        return wellDao.findAllByOrderByCountyAscTownshipAscWellNameAscWellNumberAsc();
     }
 
     @Override
     public List<WellDto> getWellsWhereWellNameContains(String wellName) {
-        return wellDao.findWellDtosByWellNameContains(wellName);
+        return wellDao.findWellDtosByWellNameRegexOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(wellName);
     }
 
     @Override
     public List<WellDto> getWellsWhereCountyContains(String county) {
-        return wellDao.findWellDtosByCountyContains(county);
+        return wellDao.findWellDtosByCountyRegexIgnoreCaseOrderByTownshipAscWellNameAscWellNumberAsc(county);
     }
 
     @Override
@@ -56,19 +58,8 @@ public class WellServiceImpl implements WellService{
         wellDao.deleteWellDtoById(wellId);
     }
 
-    //TODO find way not to have to use the findAll and then filtering down in this service.  Make MongoDB do the work.
     @Override
-    public List<WellDto> getAllWellsByProductionDateRange(Date fromDate, Date toDate) {
-        List<WellDto> result = new ArrayList<>(0);
-        wellDao.findAll()
-                .forEach(wellDto -> {
-                    for (ProductionDto productionDto : wellDto.getProduction()) {
-                        if (!fromDate.after(productionDto.getPayedDate()) && !toDate.before(productionDto.getPayedDate())) {
-                            result.add(wellDto);
-                            break;
-                        }
-                    }
-                });
-        return result;
+    public List<WellDto> getWellsProducingBetween(Date fromDate, Date toDate) {
+        return wellDao.findWellDtosByProductionPayedDateBetweenOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(fromDate,toDate);
     }
 }

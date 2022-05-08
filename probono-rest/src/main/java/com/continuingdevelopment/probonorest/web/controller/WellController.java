@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,38 +44,43 @@ public class WellController {
 
     @GetMapping()
     public ResponseEntity<List<WellDto>> getAllWells(){
-        List<WellDto> songDtoList = wellService.findAllWells();
-        HttpHeaders headers = addCountToHeader(songDtoList);
-        return new ResponseEntity<>(songDtoList,headers,HttpStatus.OK);
+        List<WellDto> wellDtoList = wellService.findAllWells();
+        HttpHeaders headers = addCountToHeader(wellDtoList);
+        return getListResponseEntity(wellDtoList, headers);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<WellDto> getWellById(@PathVariable("id") String id){
         WellDto wellDto = wellService.findWellById(id);
-        return new ResponseEntity<>(wellDto,HttpStatus.OK);
+        HttpHeaders headers = addCountToHeader(wellDto);
+        if(ObjectUtils.isEmpty(wellDto)){
+            return new ResponseEntity<>(headers,HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(wellDto,headers,HttpStatus.OK);
     }
 
     @GetMapping("/name/contains/{wellName}")
-    public ResponseEntity<List<WellDto>> getWellsWhereSongArtistContains(@PathVariable("wellName") String wellName){
+    public ResponseEntity<List<WellDto>> getWellsWhereWellNameContains(@PathVariable("wellName") String wellName){
         List<WellDto> wellDtoList = wellService.getWellsWhereWellNameContains(wellName);
         HttpHeaders headers = addCountToHeader(wellDtoList);
-        return new ResponseEntity<>(wellDtoList, headers, HttpStatus.OK);
+        return getListResponseEntity(wellDtoList, headers);
     }
+
 
     @GetMapping("/county/contains/{county}")
     public ResponseEntity<List<WellDto>> getWellsWhereCountyContains(@PathVariable("county") String county){
         List<WellDto> wellDtoList = wellService.getWellsWhereCountyContains(county);
         HttpHeaders headers = addCountToHeader(wellDtoList);
-        return new ResponseEntity<>(wellDtoList, headers, HttpStatus.OK);
+        return getListResponseEntity(wellDtoList, headers);
     }
 
     @GetMapping("/date-played/between/{fromDate}/{toDate}")
     public ResponseEntity<List<WellDto>> getWellsWhereCountyContains(
             @PathVariable("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
             @PathVariable("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate){
-        List<WellDto> wellDtoList = wellService.getAllWellsByProductionDateRange(fromDate,toDate);
+        List<WellDto> wellDtoList = wellService.getWellsProducingBetween(fromDate,toDate);
         HttpHeaders headers = addCountToHeader(wellDtoList);
-        return new ResponseEntity<>(wellDtoList, headers, HttpStatus.OK);
+        return getListResponseEntity(wellDtoList, headers);
     }
 
     @PutMapping()
@@ -90,11 +96,30 @@ public class WellController {
     }
 
     private HttpHeaders addCountToHeader(List<WellDto> wellDtoList){
-        if(CollectionUtils.isEmpty(wellDtoList)){
-            wellDtoList = new ArrayList<>();
-        }
         HttpHeaders headers = new HttpHeaders();
+
+        if(null == wellDtoList){
+            wellDtoList = new ArrayList<>(0);
+        }
         headers.add("count", String.valueOf(wellDtoList.size()));
         return headers;
+    }
+
+    private HttpHeaders addCountToHeader(WellDto wellDto){
+        HttpHeaders headers = new HttpHeaders();
+
+        if(null == wellDto){
+            headers.add("count", String.valueOf(0));
+        }else {
+            headers.add("count", String.valueOf(1));
+        }
+        return headers;
+    }
+
+    private ResponseEntity<List<WellDto>> getListResponseEntity(List<WellDto> wellDtoList, HttpHeaders headers) {
+        if(CollectionUtils.isEmpty(wellDtoList)){
+            return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(wellDtoList, headers, HttpStatus.OK);
     }
 }

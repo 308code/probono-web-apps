@@ -1,6 +1,5 @@
 package com.continuingdevelopment.probonorest.web.dao;
 
-import com.continuingdevelopment.probonorest.web.model.SongDto;
 import com.continuingdevelopment.probonorest.web.model.WellDto;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -16,21 +15,22 @@ public interface WellDao extends MongoRepository<WellDto, String> {
     WellDto insert(WellDto wellDto);
 
     //Find all wells in the camphire_drilling_wells collection
-    List<WellDto> findAll();
+    List<WellDto> findAllByOrderByCountyAscTownshipAscWellNameAscWellNumberAsc();
 
     //Find well with a particular id
     WellDto findWellDtoById(String id);
 
     //Find all wells that containe the incoming string
-    List<WellDto> findWellDtosByWellNameContains(String wellName);
+    @Query(value= "{'wellName': { '$regularExpression' : { 'pattern' : ?0, 'options' : 'i'}}}", sort ="{county:1 , township:1, wellName:1 , wellNumber:1}" )
+    List<WellDto> findWellDtosByWellNameRegexOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(String wellName);
 
     //Find all wells from a particular county
-    List<WellDto> findWellDtosByCountyContains(String county);
+    @Query(value= "{'county': { '$regularExpression' : { 'pattern' : ?0, 'options' : 'i'}}}", sort ="{county:1 , township:1, wellName:1 , wellNumber:1}" )
+    List<WellDto> findWellDtosByCountyRegexIgnoreCaseOrderByTownshipAscWellNameAscWellNumberAsc(String county);
 
-    //Find wells production in the given date range ad returned Sorted by county then wellName then wellNumber in ASC order
-    //TODO fix this so the date range search works as expected
-    //@Query(  value="{ '$and' : [ { 'production.payedDate' : { '$gte' : { $date : ?0}}} , { 'production.payedDate' : { '$lte' : { $date : ?1 }} } ]}")
-    //List<WellDto> findWellDtosByProductionDates(Date fromDate, Date toDate);
+    //Find wells production in the given date range ad returned Sorted by county then township then wellName then wellNumber all in ASC order
+    @Query(value = "{ 'production.payedDate' : { '$gt' : { '$date' : ?0}, '$lt' : { '$date' : ?1}}}", sort= "{county:1 , township:1, wellName:1 , wellNumber:1}")
+    List<WellDto> findWellDtosByProductionPayedDateBetweenOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(Date fromDate, Date toDate);
 
     //Update well
     WellDto save(WellDto wellDto);
