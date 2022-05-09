@@ -18,21 +18,22 @@ public interface SongDao extends MongoRepository<SongDto, String> {
     SongDto insert(SongDto songDto);
 
     //Find all songs in the flcSongs collection
-    List<SongDto> findAll();
+    List<SongDto> findAllByOrderByTitleAscArtistAsc();
 
     //Find songs played in the given date range ad returned Sorted by title in ASC order
     //TODO fix this so the date range search works as expected
-    @Query(value="{ '$and' : [ { 'played.datePlayed' : {'$gte' : { $date : ?0 }}} , { 'played.datePlayed' : {'$lte' : { $date : ?1 }}}]}")
+    @Query(value="{ '$and' : [ { 'played.datePlayed' : {'$gte' : { $date : ?0 }}} , { 'played.datePlayed' : {'$lte' : { $date : ?1 }}}]}",
+            sort = "{  title : 1 , artist : 1  }")
     List<SongDto> findSongsPlayedBetweenDates(Date fromDate, Date toDate);
 
     //Find songs that contain the text in their title or in the aka array
     @Query(value = "{ '$or' : [{ 'title' : { '$regularExpression' : " +
             "{ 'pattern' : '?0', 'options' : 'i'}}}, { 'aka' : { '$regularExpression' : " +
-            "{ 'pattern' : '?0', 'options' : 'i'}}}]}")
+            "{ 'pattern' : '?0', 'options' : 'i'}}}]}" , sort = "{ title : 1 , artist : 1 }")
     List<SongDto> findSongDtosByTitleContaining(String title1);
 
     //Find songs that contain the text in the artist field
-    @Query(value = "{'artist' : { '$regex' : ?0, $options: 'i'}}")
+    @Query(value = "{'artist' : { '$regex' : ?0, $options: 'i'}}", sort="{ title : 1 , artist : 1 }")
     List<SongDto> findSongDtosByArtistMatchesRegex(String artist);
 
     // Update or create, if song doesn't exist
