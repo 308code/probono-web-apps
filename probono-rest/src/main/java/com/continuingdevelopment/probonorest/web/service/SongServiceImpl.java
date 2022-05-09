@@ -32,7 +32,7 @@ public class SongServiceImpl implements SongService{
 
     @Override
     public List<SongDto> findAllSongs() {
-        return songDao.findAll();
+        return songDao.findAllByOrderByTitleAscArtistAsc();
     }
 
     @Override

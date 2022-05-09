@@ -29,7 +29,7 @@ public interface WellDao extends MongoRepository<WellDto, String> {
     List<WellDto> findWellDtosByCountyRegexIgnoreCaseOrderByTownshipAscWellNameAscWellNumberAsc(String county);
 
     //Find wells production in the given date range ad returned Sorted by county then township then wellName then wellNumber all in ASC order
-    @Query(value = "{ 'production.payedDate' : { '$gt' : { '$date' : ?0}, '$lt' : { '$date' : ?1}}}", sort= "{county:1 , township:1, wellName:1 , wellNumber:1}")
+    @Query(value = "{ 'production.payedDate' : { '$gt' : { '$date' : ?0}, '$lt' : { '$date' : ?1}}}", sort= "{ county:1 , township:1, wellName:1 , wellNumber:1}")
     List<WellDto> findWellDtosByProductionPayedDateBetweenOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(Date fromDate, Date toDate);
 
     //Update well
