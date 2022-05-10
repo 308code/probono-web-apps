@@ -2,6 +2,7 @@ package com.continuingdevelopment.probonorest.web.service;
 
 import com.continuingdevelopment.probonorest.web.dao.WellDao;
 import com.continuingdevelopment.probonorest.web.model.WellDto;
+import com.continuingdevelopment.probonorest.web.model.WellDtoComparator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -9,11 +10,12 @@ import org.springframework.util.ObjectUtils;
 import java.util.Date;
 import java.util.List;
 
-@Service
 @Slf4j
+@Service
 public class WellServiceImpl implements WellService{
 
     private final WellDao wellDao;
+    private final WellDtoComparator wellDtoComparator = new WellDtoComparator();
 
     public WellServiceImpl(WellDao wellDao){
         this.wellDao = wellDao;
@@ -35,17 +37,30 @@ public class WellServiceImpl implements WellService{
 
     @Override
     public List<WellDto> findAllWells() {
-        return wellDao.findAllByOrderByCountyAscTownshipAscWellNameAscWellNumberAsc();
+        List<WellDto> wellDtoList = wellDao.findAllByOrderByCountyAscTownshipAscWellNameAscWellNumberAsc();
+        wellDtoList.sort(wellDtoComparator);
+        return wellDtoList;
     }
 
     @Override
     public List<WellDto> getWellsWhereWellNameContains(String wellName) {
-        return wellDao.findWellDtosByWellNameRegexOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(wellName);
+        List<WellDto> wellDtoList =  wellDao.findWellDtosByWellNameRegexOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(wellName);
+        wellDtoList.sort(wellDtoComparator);
+        return wellDtoList;
     }
 
     @Override
     public List<WellDto> getWellsWhereCountyContains(String county) {
-        return wellDao.findWellDtosByCountyRegexIgnoreCaseOrderByTownshipAscWellNameAscWellNumberAsc(county);
+        List<WellDto> wellDtoList = wellDao.findWellDtosByCountyRegexIgnoreCaseOrderByTownshipAscWellNameAscWellNumberAsc(county);
+        wellDtoList.sort(wellDtoComparator);
+        return wellDtoList;
+    }
+
+    @Override
+    public List<WellDto> getWellsProducingBetween(Date fromDate, Date toDate) {
+        List<WellDto> wellDtoList =  wellDao.findWellDtosByProductionPayedDateBetweenOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(fromDate,toDate);
+        wellDtoList.sort(wellDtoComparator);
+        return wellDtoList;
     }
 
     @Override
@@ -56,10 +71,5 @@ public class WellServiceImpl implements WellService{
     @Override
     public void deleteWellById(String wellId) {
         wellDao.deleteWellDtoById(wellId);
-    }
-
-    @Override
-    public List<WellDto> getWellsProducingBetween(Date fromDate, Date toDate) {
-        return wellDao.findWellDtosByProductionPayedDateBetweenOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(fromDate,toDate);
     }
 }
