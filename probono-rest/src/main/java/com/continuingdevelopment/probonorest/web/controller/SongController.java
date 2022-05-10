@@ -37,20 +37,27 @@ public class SongController {
     public ResponseEntity<String> insertSong(@RequestBody SongDto songDto){
         String newSongId = songService.createSong(songDto);
         HttpHeaders headers = new HttpHeaders();
+        if(null == newSongId){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         headers.add("location","http://localhost:8080/api/songs/" + newSongId);
         return new ResponseEntity<>(newSongId,headers,HttpStatus.CREATED);
     }
 
     @GetMapping("/{songId}")
     public ResponseEntity<SongDto> getSong(@PathVariable("songId") String songId){
-        return new ResponseEntity<>(songService.findSongDtoById(songId), HttpStatus.OK);
+        SongDto songDto = songService.findSongDtoById(songId);
+        if(null == songDto){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(songDto, HttpStatus.OK);
     }
 
     @GetMapping()
     public ResponseEntity<List<SongDto>> getAllSongs(){
         List<SongDto> songDtoList = songService.findAllSongs();
         HttpHeaders headers = addCountToHeader(songDtoList);
-        return new ResponseEntity<>(songDtoList,headers,HttpStatus.OK);
+        return getListResponseEntity(songDtoList, headers);
     }
 
     @GetMapping("/{fromDate}/{toDate}")
@@ -58,21 +65,21 @@ public class SongController {
                                                                @PathVariable("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate){
         List<SongDto> songDtoList = songService.getSongsPlayedBetween(fromDate,toDate);
         HttpHeaders headers = addCountToHeader(songDtoList);
-        return new ResponseEntity<>(songDtoList, headers, HttpStatus.OK);
+        return getListResponseEntity(songDtoList,headers);
     }
 
     @GetMapping("/title/contains/{title}")
     public ResponseEntity<List<SongDto>> getSongTitleContains(@PathVariable("title") String title){
         List<SongDto> songDtoList = songService.getSongTitleContains(title);
         HttpHeaders headers = addCountToHeader(songDtoList);
-        return new ResponseEntity<>(songDtoList, headers, HttpStatus.OK);
+        return getListResponseEntity(songDtoList,headers);
     }
 
     @GetMapping("/artist/contains/{artist}")
     public ResponseEntity<List<SongDto>> getSongArtistContains(@PathVariable("artist") String artist){
         List<SongDto> songDtoList = songService.getSongArtistContains(artist);
         HttpHeaders headers = addCountToHeader(songDtoList);
-        return new ResponseEntity<>(songDtoList, headers, HttpStatus.OK);
+        return getListResponseEntity(songDtoList,headers);
     }
 
     @PutMapping()
@@ -94,5 +101,23 @@ public class SongController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("count", String.valueOf(songDtoList.size()));
         return headers;
+    }
+
+    private HttpHeaders addCountToHeader(SongDto songDto){
+        HttpHeaders headers = new HttpHeaders();
+
+        if(null == songDto){
+            headers.add("count", String.valueOf(0));
+        }else {
+            headers.add("count", String.valueOf(1));
+        }
+        return headers;
+    }
+
+    private ResponseEntity<List<SongDto>> getListResponseEntity(List<SongDto> songDtoList, HttpHeaders headers) {
+        if(CollectionUtils.isEmpty(songDtoList)){
+            return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(songDtoList, headers, HttpStatus.OK);
     }
 }
