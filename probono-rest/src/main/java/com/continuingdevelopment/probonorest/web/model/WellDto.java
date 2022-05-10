@@ -23,6 +23,8 @@ public class WellDto {
     private String township;
     private List<ProductionDto> production;
 
+    private static final ProductionDtoComparator productionDtoComparator = new ProductionDtoComparator();
+
     public WellDto (String id, String apiNumber, String permitNumber, String wellName, String wellNumber,
                     String county, String township, List<ProductionDto> productionDtoList){
         this.id = id;
@@ -33,6 +35,6 @@ public class WellDto {
         this.county = county;
         this.township = township;
         this.production = productionDtoList;
-        this.production.sort(new ProductionDtoComparator());
+        this.production.sort(productionDtoComparator);
     }
 }
