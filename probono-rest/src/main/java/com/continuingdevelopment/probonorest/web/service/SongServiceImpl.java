@@ -2,7 +2,8 @@ package com.continuingdevelopment.probonorest.web.service;
 
 import com.continuingdevelopment.probonorest.web.dao.SongDao;
 import com.continuingdevelopment.probonorest.web.model.SongDto;
-import com.mongodb.client.model.Collation;
+import com.continuingdevelopment.probonorest.web.model.SongDtoComparator;
+import com.continuingdevelopment.probonorest.web.model.WellDtoComparator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -14,7 +15,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class SongServiceImpl implements SongService{
-    private SongDao songDao;
+    private final SongDao songDao;
+    private final SongDtoComparator songDtoComparator = new SongDtoComparator();
 
     public SongServiceImpl(SongDao songDao){
         this.songDao = songDao;
@@ -32,7 +34,9 @@ public class SongServiceImpl implements SongService{
 
     @Override
     public List<SongDto> findAllSongs() {
-        return songDao.findAll();
+        List<SongDto> songDtoList = songDao.findAll();
+        songDtoList.sort(songDtoComparator);
+        return songDtoList;
     }
 
     @Override
@@ -51,17 +55,23 @@ public class SongServiceImpl implements SongService{
             fromDate = toDate;
             toDate = temp;
         }
-        return songDao.findSongsPlayedBetweenDates(fromDate,toDate);
+        List<SongDto> songDtoList = songDao.findSongsPlayedBetweenDates(fromDate,toDate);
+        songDtoList.sort(songDtoComparator);
+        return songDtoList;
     }
 
     @Override
     public List<SongDto> getSongTitleContains(String title){
-        return songDao.findSongDtosByTitleContaining(title);
+        List<SongDto> songDtoList =  songDao.findSongDtosByTitleContaining(title);
+        songDtoList.sort(songDtoComparator);
+        return songDtoList;
     }
 
     @Override
     public List<SongDto> getSongArtistContains(String artist) {
-        return songDao.findSongDtosByArtistMatchesRegex(artist);
+        List<SongDto> songDtoList =  songDao.findSongDtosByArtistMatchesRegex(artist);
+        songDtoList.sort(songDtoComparator);
+        return songDtoList;
     }
 
     @Override
