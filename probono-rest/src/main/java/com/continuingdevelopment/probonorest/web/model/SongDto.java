@@ -20,12 +20,14 @@ public class SongDto {
     private String[] aka;
     private List<PlayedDto> played;
 
+    private final static PlayedDtoComparator playedDtoComparator = new PlayedDtoComparator();
+
     public SongDto(String id, String title, String artist, String[] aka,List<PlayedDto> playedDtoList){
         this.id = id;
         this.title = title;
         this.artist = artist;
         this.aka = aka;
         this.played = playedDtoList;
-        this.played.sort(new PlayedDtoComparator());
+        this.played.sort(playedDtoComparator);
     }
 }
