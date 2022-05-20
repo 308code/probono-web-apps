@@ -3,7 +3,6 @@ package com.continuingdevelopment.probonorest.web.service;
 import com.continuingdevelopment.probonorest.web.dao.SongDao;
 import com.continuingdevelopment.probonorest.web.model.SongDto;
 import com.continuingdevelopment.probonorest.web.model.SongDtoComparator;
-import com.continuingdevelopment.probonorest.web.model.WellDtoComparator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -23,9 +22,7 @@ public class SongServiceImpl implements SongService{
     }
 
     @Override
-    public String createSong(SongDto songDto) {
-        return songDao.save(songDto).getId();
-    }
+    public String createSong(SongDto songDto) {return songDao.save(songDto).getId();}
 
     @Override
     public SongDto findSongDtoById(String songId) {

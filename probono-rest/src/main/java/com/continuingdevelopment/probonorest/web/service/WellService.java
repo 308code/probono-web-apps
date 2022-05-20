@@ -1,17 +1,18 @@
 package com.continuingdevelopment.probonorest.web.service;
 
 import com.continuingdevelopment.probonorest.web.model.WellDto;
+import com.mongodb.MongoException;
 
 import java.util.Date;
 import java.util.List;
 
 public interface WellService {
-    WellDto findWellById(String wellId);
-    List<WellDto> findAllWells();
-    List<WellDto> getWellsWhereWellNameContains(String title);
-    List<WellDto> getWellsWhereCountyContains(String title);
-    List<WellDto> getWellsProducingBetween(Date fromDate, Date toDate);
-    String createWell(WellDto wellDto);
-    void updateWell(WellDto wellDto);
-    void deleteWellById(String wellId);
+    WellDto findWellById(String wellId) throws MongoException;
+    List<WellDto> findAllWells() throws MongoException;
+    List<WellDto> getWellsWhereWellNameContains(String title) throws MongoException;
+    List<WellDto> getWellsWhereCountyContains(String title) throws MongoException;
+    List<WellDto> getWellsProducingBetween(Date fromDate, Date toDate) throws MongoException;
+    String createWell(WellDto wellDto) throws MongoException;
+    void updateWell(WellDto wellDto) throws MongoException;
+    void deleteWellById(String wellId) throws MongoException;
 }
