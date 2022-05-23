@@ -17,6 +17,7 @@
         <junit-v>5.7.0-M1</junit-v>
         <mockito-v>3.9.0</mockito-v>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <!-- Testing -->
@@ -100,5 +101,6 @@
     </build>
     <modules>
         <module>probono-rest</module>
+        <module>probono-deploy</module>
     </modules>
 </project>

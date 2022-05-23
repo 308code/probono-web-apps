@@ -1,0 +1,34 @@
+version: "3.3"
+services:
+
+#  probono-client:
+#    image: 308code/probono-client:1.0-SNAPSHOT
+#    container_name: probono-client
+#    volumes:
+#      - ../probono-client/src:/app/src
+#    restart: always
+#    ports:
+#      - '4200:4200'
+#    expose:
+#      - '4200'
+#    depends_on:
+#      - probono-rest
+
+  probono-rest:
+    image: 308code/probono-rest:1.0-SNAPSHOT
+    container_name: probono-rest
+    environment:
+      RUN_ENV: 'development' # 'test' 'production'
+      MONGO_PROBONO_USER_NAME: 'probono'
+      MONGO_PROBONO_PSWD: 'probono_1'
+      MONGO_PROBONO_DB_NAME: 'probono'
+    restart: always
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080'
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "localhost:8080/api/healthcheck" ]
+      interval: "15s"
+      timeout: "5s"
+      retries: 20
