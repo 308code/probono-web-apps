@@ -6,17 +6,15 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-
 public interface SongService {
-    SongDto findSongDtoById(String songId) throws MongoException;
-    List<SongDto> findAllSongs() throws MongoException;
-    List<SongDto> getSongTitleContains(String title) throws MongoException;
-    List<SongDto> getSongArtistContains(String title) throws MongoException;
-    List<SongDto> getSongsPlayedBetween(Date fromDate, Date toDate) throws MongoException;
-    String createSong(SongDto songDto) throws MongoException;
+    ResponseEntity<SongDto> getSongById(String songId) throws MongoException;
+    ResponseEntity<List<SongDto>> getAllSongs() throws MongoException;
+    ResponseEntity<List<SongDto>> getAllSongsByTitle(String title) throws MongoException;
+    ResponseEntity<List<SongDto>> getAllSongsByArtist(String title) throws MongoException;
+    ResponseEntity<List<SongDto>> getAllSongsPlayedBetween(Date fromDate, Date toDate) throws MongoException;
+    ResponseEntity<String> createSong(SongDto songDto) throws MongoException;
 
-    void updateSong(SongDto songDto) throws MongoException;
+    ResponseEntity<Void> updateSong(SongDto songDto) throws MongoException;
 
-    void deleteSong(String songId) throws MongoException;
+    ResponseEntity<Void> deleteSong(String songId) throws MongoException;
 }
