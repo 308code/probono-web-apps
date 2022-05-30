@@ -61,10 +61,10 @@ public class WellServiceImpl implements WellService{
             log.error("Error getting well with id: {} MESSAGE: {}  STACKTRACE: {}", wellId, e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if(ObjectUtils.isEmpty(wellDto)){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         HttpHeaders headers = addCountToHeader(wellDto);
+        if(ObjectUtils.isEmpty(wellDto)){
+            return new ResponseEntity<>(headers,HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(wellDto,headers,HttpStatus.OK);
     }
 
@@ -73,14 +73,14 @@ public class WellServiceImpl implements WellService{
         List<WellDto> wellDtoList;
         try {
             wellDtoList = wellDao.findAllByOrderByCountyAscTownshipAscWellNameAscWellNumberAsc();
-            wellDtoList.sort(wellDtoComparator);
         }catch (MongoException e){
             log.error("Error getting all wells: MESSAGE: {}  STACKTRACE: {}", e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if(CollectionUtils.isEmpty(wellDtoList)){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if(CollectionUtils.isNotEmpty(wellDtoList)){
+            wellDtoList.sort(wellDtoComparator);
         }
+
         HttpHeaders headers = addCountToHeader(wellDtoList);
         return getListResponseEntity(wellDtoList, headers);
     }
@@ -90,14 +90,14 @@ public class WellServiceImpl implements WellService{
         List<WellDto> wellDtoList;
         try {
             wellDtoList = wellDao.findWellDtosByWellNameRegexOrderByCountyAscTownshipAscWellNameAscWellNumberAsc(wellName);
-            wellDtoList.sort(wellDtoComparator);
         }catch (MongoException e){
             log.error("Error getting all wells who's name contains: {} MESSAGE: {}  STACKTRACE: {}",wellName, e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if(CollectionUtils.isEmpty(wellDtoList)){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if(CollectionUtils.isNotEmpty(wellDtoList)){
+            wellDtoList.sort(wellDtoComparator);
         }
+
         HttpHeaders headers = addCountToHeader(wellDtoList);
         return getListResponseEntity(wellDtoList, headers);
     }
@@ -107,13 +107,13 @@ public class WellServiceImpl implements WellService{
         List<WellDto> wellDtoList;
         try {
             wellDtoList = wellDao.findWellDtosByCountyRegexIgnoreCaseOrderByTownshipAscWellNameAscWellNumberAsc(county);
-            wellDtoList.sort(wellDtoComparator);
+
         }catch (MongoException e){
             log.error("Error getting all wells who's county name contains: {} MESSAGE: {}  STACKTRACE: {}",county, e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if(CollectionUtils.isEmpty(wellDtoList)){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if(CollectionUtils.isNotEmpty(wellDtoList)){
+            wellDtoList.sort(wellDtoComparator);
         }
         HttpHeaders headers = addCountToHeader(wellDtoList);
         return getListResponseEntity(wellDtoList, headers);
@@ -129,8 +129,8 @@ public class WellServiceImpl implements WellService{
                     SDF.format(fromDate), SDF.format(toDate), e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if(CollectionUtils.isEmpty(wellDtoList)){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if(CollectionUtils.isNotEmpty(wellDtoList)){
+            wellDtoList.sort(wellDtoComparator);
         }
         HttpHeaders headers = addCountToHeader(wellDtoList);
         return getListResponseEntity(wellDtoList, headers);
