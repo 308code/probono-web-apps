@@ -45,6 +45,12 @@
                 <version>${mockito-v}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>com.flextrade.jfixture</groupId>
+                <artifactId>jfixture-mockito</artifactId>
+                <scope>Test</scope>
+                <version>2.7.2</version>
+            </dependency>
             <!-- Database -->
             <dependency>
                 <groupId>org.springframework.data</groupId>

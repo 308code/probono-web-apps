@@ -36,7 +36,7 @@ public class SongServiceImpl implements SongService{
         String newSongId;
         try{
             responseSongDto = songDao.save(songDto);
-            newSongId = responseSongDto.getId();
+            newSongId = ObjectUtils.isEmpty(responseSongDto) ? "" : responseSongDto.getId();
         }catch (MongoException e){
             log.error("Error creating song: {}  MESSAGE: {}  STACKTRACE: {}", songDto, e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -53,6 +53,7 @@ public class SongServiceImpl implements SongService{
     @Override
     public ResponseEntity<SongDto> getSongById(String songId) {
         SongDto songDto;
+
         try {
             songDto = songDao.findSongDtoById(songId);
         } catch (MongoException e) {
@@ -70,11 +71,13 @@ public class SongServiceImpl implements SongService{
     public ResponseEntity<List<SongDto>> getAllSongs() {
         List<SongDto> songDtoList;
         try {
-            songDtoList = songDao.findAll();
-            songDtoList.sort(songDtoComparator);
+            songDtoList = songDao.findAllByOrderByTitleAscArtistAsc();
         } catch (MongoException e) {
             log.error("Error getting all songs: MESSAGE: {}  STACKTRACE: {}", e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if(ObjectUtils.isNotEmpty(songDtoList)){
+            songDtoList.sort(songDtoComparator);
         }
         HttpHeaders headers = addCountToHeader(songDtoList);
         return getListResponseEntity(songDtoList, headers);
@@ -100,11 +103,13 @@ public class SongServiceImpl implements SongService{
         List<SongDto> songDtoList;
         try {
             songDtoList = songDao.findSongsPlayedBetweenDates(fromDate, toDate);
-            songDtoList.sort(songDtoComparator);
         }catch (MongoException e) {
             log.error("Error getting played within the date range of FROM: {}  TO: {}  MESSAGE: {}  STACKTRACE: {}",
                     SDF.format(toDate), SDF.format(toDate), e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if(ObjectUtils.isNotEmpty(songDtoList)){
+            songDtoList.sort(songDtoComparator);
         }
         HttpHeaders headers = addCountToHeader(songDtoList);
         return getListResponseEntity(songDtoList, headers);
@@ -119,6 +124,9 @@ public class SongServiceImpl implements SongService{
             log.error("Error getting songs that title contains string: {}  MESSAGE: {}  STACKTRACE: {}", title, e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if(ObjectUtils.isNotEmpty(songDtoList)){
+            songDtoList.sort(songDtoComparator);
+        }
         HttpHeaders headers = addCountToHeader(songDtoList);
         return getListResponseEntity(songDtoList, headers);
     }
@@ -128,10 +136,12 @@ public class SongServiceImpl implements SongService{
         List<SongDto> songDtoList;
         try {
             songDtoList = songDao.findSongDtosByArtistMatchesRegex(artist);
-            songDtoList.sort(songDtoComparator);
         } catch (MongoException e) {
             log.error("Error gettings songs that artist contains string: {}  MESSAGE: {}  STACKTRACE: {}", artist, e.getMessage(), e.getStackTrace());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if(ObjectUtils.isNotEmpty(songDtoList)){
+            songDtoList.sort(songDtoComparator);
         }
         HttpHeaders headers = addCountToHeader(songDtoList);
         return getListResponseEntity(songDtoList, headers);
@@ -146,7 +156,6 @@ public class SongServiceImpl implements SongService{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
     }
 
     @Override
