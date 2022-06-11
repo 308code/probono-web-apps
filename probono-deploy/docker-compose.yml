@@ -14,6 +14,21 @@ services:
 #    depends_on:
 #      - probono-rest
 
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb
+    restart: always
+    volumes:
+      - ./database:/data/db
+    ports:
+      - '27017:27017'
+
+  mongodb-seed:
+    build: ./mongodb-seed
+    container_name: mongodb-seed
+    depends_on:
+      - mongodb
+
   probono-rest:
     image: 308code/probono-rest:1.0-SNAPSHOT
     container_name: probono-rest
@@ -23,10 +38,13 @@ services:
       MONGO_PROBONO_PSWD: 'probono_1'
       MONGO_PROBONO_DB_NAME: 'probono'
     restart: always
+    depends_on:
+      - mongodb
     ports:
       - '8080:8080'
     expose:
       - '8080'
+
     healthcheck:
       test: [ "CMD", "curl", "-f", "localhost:8080/api/healthcheck" ]
       interval: "15s"
