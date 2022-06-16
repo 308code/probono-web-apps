@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;
 
-@SpringBootTest
+//@SpringBootTest
 class HealthCheckControllerIT {
     String baseURI = "http://localhost:8080/api/";
     @Test
