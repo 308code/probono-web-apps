@@ -10,3 +10,21 @@ probono-deploy/database/
 
 # Log file
 *.log
+
+#System files
+productiontracker-client/.DS_Store
+productiontracker-client/Thumbs.db
+
+#angular files/directories to ignore
+dist
+tmp
+out-tsc
+node_modules
+productiontracker-client/node/node_modules
+.sass-cache
+productiontracker-client/.angular/cache
+.sass-cache
+connect.lock
+coverage
+libpeerconnection.log
+npm-debug.log

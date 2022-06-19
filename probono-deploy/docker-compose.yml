@@ -1,18 +1,18 @@
 version: "3.3"
 services:
 
-#  probono-client:
-#    image: 308code/probono-client:1.0-SNAPSHOT
-#    container_name: probono-client
-#    volumes:
-#      - ../probono-client/src:/app/src
-#    restart: always
-#    ports:
-#      - '4200:4200'
-#    expose:
-#      - '4200'
-#    depends_on:
-#      - probono-rest
+  productiontracker-client:
+    build: ../productiontracker-client
+    container_name: productiontracker-client
+    volumes:
+      - ../productiontracker-client/src:/app/src
+    restart: always
+    ports:
+      - '4200:4200'
+    expose:
+      - '4200'
+    depends_on:
+      - probono-rest
 
   mongodb:
     image: mongo:5.0
