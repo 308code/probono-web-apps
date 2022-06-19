@@ -108,5 +108,6 @@
     <modules>
         <module>probono-rest</module>
         <module>probono-deploy</module>
+        <module>productiontracker-client</module>
     </modules>
 </project>
