@@ -1,0 +1,34 @@
+#header-div{
+  height: 6.0rem;
+  max-width: 100%;
+  background-color: #0d64c1;
+}
+
+img{
+  height: 6.0rem;
+}
+
+#header-links{
+  float: right;
+  padding-top: 4.3rem;
+}
+
+.header-links{
+  margin-right: 1.5rem;
+}
+
+a{
+  text-decoration: none;
+  font-size: 1.35rem;
+  color: #e1e3ea;
+}
+
+a:hover{
+  text-decoration: none;
+  color: #012246;
+}
+
+a:visited{
+  text-decoration: none;
+  color: #efd296;
+}
